@@ -1,0 +1,66 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  body {
+    @apply bg-mazal-gray text-zinc-900 font-sans;
+  }
+
+  h1, h2, h3 {
+    @apply font-display tracking-wide;
+  }
+}
+
+@layer components {
+  .site-shell {
+    @apply mx-auto w-full max-w-6xl px-4 sm:px-6 lg:px-8;
+  }
+
+  .nav-link {
+    @apply rounded-md px-3 py-2 text-xs font-extrabold uppercase tracking-wide text-mazal-forest transition hover:bg-mazal-lime/30 hover:text-mazal-forest;
+  }
+
+  .section-chip {
+    @apply inline-block rounded-lg bg-mazal-green px-5 py-2 text-lg font-extrabold uppercase tracking-wider text-mazal-gray;
+  }
+
+  .catalog-card {
+    @apply rounded-xl border border-emerald-900/15 bg-white shadow-sm transition hover:-translate-y-1 hover:shadow-lg;
+  }
+
+  .pill-button {
+    @apply inline-flex h-11 items-center justify-center rounded-full bg-mazal-forest px-5 text-sm font-extrabold uppercase tracking-wide text-white shadow-cta-raised transition hover:-translate-y-0.5 hover:bg-mazal-green;
+  }
+
+  .pill-button-orange {
+    @apply inline-flex h-10 items-center justify-center rounded-full bg-mazal-orange px-5 text-xs font-extrabold uppercase tracking-wide text-white shadow-cta-raised transition hover:-translate-y-0.5 hover:bg-mazal-orange-dark;
+  }
+
+  .mobile-menu-panel {
+    @apply invisible pointer-events-none opacity-0;
+    transform-origin: top;
+    overflow: hidden;
+  }
+
+  .mobile-menu-panel.is-open {
+    @apply visible pointer-events-auto;
+    animation: mobile-menu-open 360ms cubic-bezier(0.22, 1, 0.36, 1) forwards;
+  }
+
+  .mobile-menu-panel.is-closing {
+    @apply pointer-events-none;
+    animation: mobile-menu-open 360ms cubic-bezier(0.22, 1, 0.36, 1) reverse forwards;
+  }
+}
+
+@keyframes mobile-menu-open {
+  from {
+    opacity: 0;
+    transform: translateY(-8px) scaleY(0.72);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scaleY(1);
+  }
+}
