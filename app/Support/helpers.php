@@ -172,6 +172,23 @@ if (!function_exists('redirect')) {
 if (!function_exists('category_image_by_filename')) {
     function category_image_by_filename(?string $filename, string $fallbackSlug = ''): string
     {
+        $slug = strtolower(trim($fallbackSlug));
+        $slug = preg_replace('/[^a-z0-9]+/', '', $slug) ?? '';
+
+        $canonicalBySlug = [
+            'jardineria' => 'jardineria.png',
+            'ferreteria' => 'ferreteria.png',
+            'albanileria' => 'ALBANILERIA.png',
+            'buloneria' => 'buloneria.png',
+            'herrajes' => 'herrajes.png',
+            'tejidos' => 'tejidos.png',
+            'sanitarios' => 'sanitarios.png',
+        ];
+
+        if ($slug !== '' && isset($canonicalBySlug[$slug])) {
+            return asset('images/categories/' . rawurlencode($canonicalBySlug[$slug]));
+        }
+
         $name = trim((string)$filename);
         if ($name !== '') {
             $normalized = str_replace('\\', '/', $name);
@@ -213,7 +230,15 @@ if (!function_exists('product_image_by_filename')) {
             return null;
         }
 
-        return asset('images/products/' . rawurlencode($safeFilename));
+        $info = pathinfo($safeFilename);
+        $baseName = strtoupper((string)($info['filename'] ?? ''));
+        $extension = strtolower((string)($info['extension'] ?? 'png'));
+
+        if ($baseName === '') {
+            return null;
+        }
+
+        return asset('images/products/' . rawurlencode($baseName . '.' . $extension));
     }
 }
 
