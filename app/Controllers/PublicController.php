@@ -180,25 +180,52 @@ final class PublicController
 
     private function fetchFeaturedProducts(int $limit = 4): array
     {
+        if ($limit <= 0) {
+            return [];
+        }
+
         try {
-            $stmt = Database::connection()->prepare(
+            $pdo = Database::connection();
+            $categoryStmt = $pdo->prepare(
+                'SELECT c.id, c.slug
+                 FROM categories c
+                 WHERE c.is_active = 1
+                   AND EXISTS (
+                       SELECT 1 FROM products p
+                       WHERE p.category_id = c.id AND p.is_active = 1
+                   )
+                 ORDER BY RAND()
+                 LIMIT :limit',
+            );
+            $categoryStmt->bindValue(':limit', $limit, PDO::PARAM_INT);
+            $categoryStmt->execute();
+            $categories = $categoryStmt->fetchAll(PDO::FETCH_ASSOC);
+
+            $productStmt = $pdo->prepare(
                 'SELECT
                     p.product_code,
                     p.name,
                     p.unit,
                     p.quantity_per_bulk,
-                    p.image_filename,
-                    c.slug AS category_slug
+                    p.image_filename
                  FROM products p
-                 INNER JOIN categories c ON c.id = p.category_id
-                 WHERE p.is_active = 1
-                   AND c.is_active = 1
-                 ORDER BY p.id ASC
-                 LIMIT :limit',
+                 WHERE p.category_id = :category_id
+                   AND p.is_active = 1
+                 ORDER BY RAND()
+                 LIMIT 1',
             );
-            $stmt->bindValue(':limit', $limit, PDO::PARAM_INT);
-            $stmt->execute();
-            return $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+            $products = [];
+            foreach ($categories as $category) {
+                $productStmt->execute(['category_id' => $category['id']]);
+                $product = $productStmt->fetch(PDO::FETCH_ASSOC);
+                if ($product !== false) {
+                    $product['category_slug'] = $category['slug'];
+                    $products[] = $product;
+                }
+            }
+
+            return $products;
         } catch (Throwable) {
             return [];
         }

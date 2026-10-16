@@ -1,4 +1,4 @@
-<section class="relative h-[36vh] min-h-[178px] overflow-hidden border-b border-emerald-950/10 bg-cover bg-center sm:h-[56vh] sm:min-h-[340px]" style="background-image:linear-gradient(rgba(2,38,1,.2), rgba(2,38,1,.2)), url('<?= e(asset('images/banners/home-hero.png')) ?>');">
+<section class="relative h-[36vh] min-h-[178px] overflow-hidden border-b border-emerald-950/10 bg-cover bg-center sm:h-[56vh] sm:min-h-[340px]" style="background-image:linear-gradient(rgba(2,38,1,.2), rgba(2,38,1,.2)), url('<?= e(asset('images/banners/home-container.png')) ?>');">
 </section>
 
 <section class="site-shell py-10">
