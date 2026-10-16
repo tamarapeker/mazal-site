@@ -17,6 +17,15 @@ return [
         'password' => (string)env('DB_PASSWORD', ''),
         'charset' => 'utf8mb4',
     ],
+    'mail' => [
+        'host' => (string)env('MAIL_HOST', ''),
+        'port' => (int)env('MAIL_PORT', 587),
+        'username' => (string)env('MAIL_USERNAME', ''),
+        'password' => (string)env('MAIL_PASSWORD', ''),
+        'encryption' => (string)env('MAIL_ENCRYPTION', 'tls'),
+        'from_address' => (string)env('MAIL_FROM_ADDRESS', 'info@mazalimportaciones.com.ar'),
+        'from_name' => (string)env('MAIL_FROM_NAME', 'Mazal Importaciones'),
+    ],
     'session' => [
         'name' => (string)env('SESSION_NAME', 'mazal_session'),
     ],

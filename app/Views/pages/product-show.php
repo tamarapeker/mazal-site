@@ -30,13 +30,13 @@ if (is_array($sizes)) {
     Volver a <?= e((string)$product['category_name']) ?>
   </a>
 
-  <div class="mt-6 grid gap-6 lg:grid-cols-[1.1fr_1.9fr]">
+  <div class="mt-6 grid items-start gap-6 lg:grid-cols-[1.1fr_1.9fr]">
     <article class="catalog-card overflow-hidden">
       <?php if ($productImage !== null): ?>
         <img
           src="<?= e($productImage) ?>"
           alt="<?= e((string)$product['name']) ?>"
-          class="aspect-[4/3] w-full object-cover">
+          class="block h-auto w-full">
       <?php else: ?>
         <div class="aspect-[4/3] bg-gradient-to-br from-mazal-lime/20 to-mazal-green/35"></div>
         <div class="border-t border-emerald-950/10 p-4 text-xs font-semibold uppercase tracking-wider text-zinc-500">

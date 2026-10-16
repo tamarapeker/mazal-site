@@ -2,12 +2,18 @@
 declare(strict_types=1);
 
 use App\Controllers\Admin\AuthController;
+use App\Controllers\ContactController;
 use App\Controllers\PublicController;
 use App\Core\Router;
 
 define('BASE_PATH', dirname(__DIR__));
 
 require BASE_PATH . '/app/Support/helpers.php';
+
+$composerAutoload = base_path('vendor/autoload.php');
+if (is_file($composerAutoload)) {
+    require $composerAutoload;
+}
 
 spl_autoload_register(static function (string $class): void {
     $prefix = 'App\\';
@@ -33,6 +39,7 @@ start_session_if_needed();
 $router = new Router();
 
 $publicController = new PublicController();
+$contactController = new ContactController();
 $authController = new AuthController();
 
 require base_path('routes/web.php');

@@ -37,10 +37,13 @@ Upload these folders:
 - `public`
 - `routes`
 - `storage`
+- `vendor` (generated locally with `composer install --no-dev --optimize-autoloader`)
 
 Upload these files:
 
 - `.env`
+- `composer.json`
+- `composer.lock`
 
 You do **not** need to upload:
 
@@ -100,9 +103,26 @@ DB_USER=YOUR_DB_USER
 DB_PASSWORD=YOUR_DB_PASSWORD
 
 SESSION_NAME=mazal_session
+
+MAIL_HOST=c1950410.ferozo.com
+MAIL_PORT=465
+MAIL_USERNAME=info@mazalimportaciones.com.ar
+MAIL_PASSWORD=YOUR_SMTP_PASSWORD
+MAIL_ENCRYPTION=ssl
+MAIL_FROM_ADDRESS=info@mazalimportaciones.com.ar
+MAIL_FROM_NAME="Mazal Importaciones"
 ```
 
 Use the database host shown by InfinityFree. It is usually **not** `127.0.0.1`.
+
+The contact form uses authenticated SMTP to send to `info@mazalimportaciones.com.ar`.
+InfinityFree restricts PHP's native `mail()` function, so configure an external SMTP provider
+as described in [their email documentation](https://forum.infinityfree.com/t/emails-from-my-website-arent-working/49242).
+Mazal's supplied SMTP connection is `c1950410.ferozo.com:465` with `MAIL_ENCRYPTION=ssl`.
+Fill in the mailbox password and confirm the SMTP username with the email provider.
+Upload `vendor/` alongside `app/`, outside `public_html`.
+After uploading, submit a contact request and check the destination inbox. Without valid SMTP settings,
+the page will report that the request could not be sent.
 
 ## Notes
 

@@ -27,11 +27,6 @@ final class PublicController
         View::render('pages/about', ['title' => 'About']);
     }
 
-    public function contact(): void
-    {
-        View::render('pages/contact', ['title' => 'Contact']);
-    }
-
     public function howToBuy(): void
     {
         View::render('pages/how-to-buy', ['title' => 'How to Buy']);

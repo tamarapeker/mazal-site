@@ -3,7 +3,8 @@ declare(strict_types=1);
 
 $router->get('/', [$publicController, 'home']);
 $router->get('/about', [$publicController, 'about']);
-$router->get('/contact', [$publicController, 'contact']);
+$router->get('/contact', [$contactController, 'show']);
+$router->post('/contact', [$contactController, 'send']);
 $router->get('/how-to-buy', [$publicController, 'howToBuy']);
 $router->get('/como-comprar', [$publicController, 'howToBuy']);
 $router->get('/categories', [$publicController, 'categories']);

@@ -1,0 +1,10 @@
+{
+  "name": "mazal/mazal-site",
+  "description": "Mazal product catalog and contact website",
+  "type": "project",
+  "require": {
+    "php": ">=8.0",
+    "ext-openssl": "*",
+    "phpmailer/phpmailer": "^7.0"
+  }
+}

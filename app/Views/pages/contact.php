@@ -1,3 +1,9 @@
+<?php
+/** @var array<string, string> $storeTypes */
+/** @var array<string, string> $old */
+/** @var list<string> $errors */
+/** @var string|null $success */
+?>
 <section class="relative h-[24vh] min-h-[150px] overflow-hidden border-b border-emerald-950/10 bg-cover bg-center sm:h-[38vh] sm:min-h-[220px]" style="background-image:linear-gradient(rgba(2,38,1,.4), rgba(2,38,1,.4)), url('<?= e(asset('images/banners/inner-hero.png')) ?>');">
   <div class="site-shell flex h-full items-center">
     <h1 class="font-display text-4xl font-extrabold uppercase tracking-widest text-white sm:text-5xl">Contacto</h1>
@@ -13,42 +19,66 @@
   </div>
 
   <div class="mx-auto mt-7 max-w-xl rounded-xl border border-emerald-950/10 bg-white p-5 shadow-sm sm:p-6">
-    <form action="#" method="post" class="grid gap-4">
+    <?php if (!empty($success)): ?>
+      <div role="status" class="mb-4 rounded-md border border-emerald-950/10 bg-emerald-50 p-3 text-sm font-semibold text-mazal-forest">
+        <?= e((string)$success) ?>
+      </div>
+    <?php endif; ?>
+
+    <?php if (!empty($errors)): ?>
+      <div role="alert" class="mb-4 rounded-md border border-zinc-300 bg-mazal-gray p-3 text-sm text-zinc-700">
+        <p class="font-bold">Revisá tu consulta:</p>
+        <ul class="mt-2 grid gap-1">
+          <?php foreach ($errors as $error): ?>
+            <li><?= e((string)$error) ?></li>
+          <?php endforeach; ?>
+        </ul>
+      </div>
+    <?php endif; ?>
+
+    <form action="<?= e(url('/contact')) ?>" method="post" class="grid gap-4">
+      <?= csrf_field() ?>
+      <div class="hidden" aria-hidden="true">
+        <label for="contact_website">Sitio web</label>
+        <input id="contact_website" name="website" type="text" tabindex="-1" autocomplete="off">
+      </div>
+
+      <p class="text-xs text-zinc-600">Los campos con * son obligatorios.</p>
+
       <div class="grid gap-1">
-        <label class="text-xs font-bold uppercase tracking-wide text-zinc-600" for="full_name">Nombre y apellido</label>
-        <input id="full_name" name="full_name" type="text" class="rounded-md border border-zinc-300 px-3 py-2 text-sm outline-none transition focus:border-mazal-green focus:ring-4 focus:ring-mazal-lime/30">
+        <label class="text-xs font-bold uppercase tracking-wide text-zinc-600" for="full_name">Nombre y apellido *</label>
+        <input id="full_name" name="full_name" type="text" value="<?= e($old['full_name'] ?? '') ?>" minlength="2" maxlength="150" autocomplete="name" required class="rounded-md border border-zinc-300 px-3 py-2 text-sm outline-none transition focus:border-mazal-green focus:ring-4 focus:ring-mazal-lime/30">
       </div>
 
       <div class="grid gap-1">
-        <label class="text-xs font-bold uppercase tracking-wide text-zinc-600" for="phone">Telefono</label>
-        <input id="phone" name="phone" type="text" class="rounded-md border border-zinc-300 px-3 py-2 text-sm outline-none transition focus:border-mazal-green focus:ring-4 focus:ring-mazal-lime/30">
+        <label class="text-xs font-bold uppercase tracking-wide text-zinc-600" for="phone">Teléfono *</label>
+        <input id="phone" name="phone" type="tel" value="<?= e($old['phone'] ?? '') ?>" pattern="\+?([ .\-\(\)]*[0-9]){7,15}[ .\-\(\)]*" title="Ingresá entre 7 y 15 dígitos. Podés usar + al inicio, espacios, guiones y paréntesis." maxlength="50" autocomplete="tel" required class="rounded-md border border-zinc-300 px-3 py-2 text-sm outline-none transition focus:border-mazal-green focus:ring-4 focus:ring-mazal-lime/30">
       </div>
 
       <div class="grid gap-1">
-        <label class="text-xs font-bold uppercase tracking-wide text-zinc-600" for="email">Email</label>
-        <input id="email" name="email" type="email" class="rounded-md border border-zinc-300 px-3 py-2 text-sm outline-none transition focus:border-mazal-green focus:ring-4 focus:ring-mazal-lime/30">
+        <label class="text-xs font-bold uppercase tracking-wide text-zinc-600" for="email">Email *</label>
+        <input id="email" name="email" type="email" value="<?= e($old['email'] ?? '') ?>" maxlength="254" autocomplete="email" required class="rounded-md border border-zinc-300 px-3 py-2 text-sm outline-none transition focus:border-mazal-green focus:ring-4 focus:ring-mazal-lime/30">
       </div>
 
       <div class="grid gap-1">
         <label class="text-xs font-bold uppercase tracking-wide text-zinc-600" for="province">Provincia</label>
-        <input id="province" name="province" type="text" class="rounded-md border border-zinc-300 px-3 py-2 text-sm outline-none transition focus:border-mazal-green focus:ring-4 focus:ring-mazal-lime/30">
+        <input id="province" name="province" type="text" value="<?= e($old['province'] ?? '') ?>" maxlength="100" autocomplete="address-level1" class="rounded-md border border-zinc-300 px-3 py-2 text-sm outline-none transition focus:border-mazal-green focus:ring-4 focus:ring-mazal-lime/30">
       </div>
 
       <fieldset class="grid gap-2 rounded-md border border-zinc-200 p-3">
         <legend class="px-1 text-xs font-bold uppercase tracking-wide text-zinc-600">Tipo de punto de venta</legend>
-        <label class="flex items-center gap-2 text-sm text-zinc-700">
-          <input type="radio" name="store_type" class="h-4 w-4 border-zinc-300 text-mazal-green focus:ring-mazal-lime" checked>
-          Ferreteria al publico
-        </label>
-        <label class="flex items-center gap-2 text-sm text-zinc-700">
-          <input type="radio" name="store_type" class="h-4 w-4 border-zinc-300 text-mazal-green focus:ring-mazal-lime">
-          Distribuidor
-        </label>
-        <label class="flex items-center gap-2 text-sm text-zinc-700">
-          <input type="radio" name="store_type" class="h-4 w-4 border-zinc-300 text-mazal-green focus:ring-mazal-lime">
-          Mayorista
-        </label>
+        <?php foreach ($storeTypes as $value => $label): ?>
+          <label class="flex items-center gap-2 text-sm text-zinc-700">
+            <input type="radio" name="store_type" value="<?= e($value) ?>" class="h-4 w-4 border-zinc-300 text-mazal-green focus:ring-mazal-lime" <?= ($old['store_type'] ?? '') === $value ? 'checked' : '' ?>>
+            <?= e($label) ?>
+          </label>
+        <?php endforeach; ?>
       </fieldset>
+
+      <div class="grid gap-1">
+        <label class="text-xs font-bold uppercase tracking-wide text-zinc-600" for="message">Consulta</label>
+        <textarea id="message" name="message" rows="5" maxlength="2000" placeholder="Contanos tu consulta o cualquier aclaración que quieras agregar." class="rounded-md border border-zinc-300 px-3 py-2 text-sm outline-none transition focus:border-mazal-green focus:ring-4 focus:ring-mazal-lime/30"><?= e($old['message'] ?? '') ?></textarea>
+      </div>
 
       <button type="submit" class="mt-2 rounded-md bg-mazal-green px-4 py-3 text-sm font-extrabold uppercase tracking-wide text-white transition hover:bg-mazal-forest">
         Enviar
@@ -68,9 +98,9 @@
         <span>WhatsApp: +54 9 11 4537 6452</span>
       </a>
 
-      <a href="mailto:info@mazalimportaciones.com" class="inline-flex items-center gap-3 rounded-lg border border-emerald-950/10 px-3 py-2 text-sm font-semibold text-zinc-700 transition hover:border-mazal-green hover:bg-emerald-50">
+      <a href="mailto:info@mazalimportaciones.com.ar" class="inline-flex items-center gap-3 rounded-lg border border-emerald-950/10 px-3 py-2 text-sm font-semibold text-zinc-700 transition hover:border-mazal-green hover:bg-emerald-50">
         <img src="<?= e(asset('icons/social/mail.svg')) ?>" alt="Email" class="h-5 w-5">
-        <span>Email: info@mazalimportaciones.com</span>
+        <span>Email: info@mazalimportaciones.com.ar</span>
       </a>
 
       <a href="https://instagram.com/mazal_importaciones_srl" target="_blank" rel="noreferrer" class="inline-flex items-center gap-3 rounded-lg border border-emerald-950/10 px-3 py-2 text-sm font-semibold text-zinc-700 transition hover:border-mazal-green hover:bg-emerald-50">
