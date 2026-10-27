@@ -1,28 +1,30 @@
-<section class="card">
-  <h1 style="margin-top:0">Dashboard</h1>
+<div class="page-heading">
+  <p class="eyebrow">Backoffice</p>
+  <h1>Resumen del catálogo</h1>
   <?php if (!empty($admin)): ?>
-    <p style="margin-top:0; color:#475569;">
-      Signed in as <strong><?= e((string)$admin['full_name']) ?></strong>
-      (<?= e((string)$admin['email']) ?>)
-    </p>
+    <p class="muted">Sesión de <?= e((string)$admin['full_name']) ?> · <?= e((string)$admin['email']) ?></p>
   <?php endif; ?>
+</div>
 
-  <div style="display:grid; grid-template-columns:repeat(auto-fit, minmax(160px, 1fr)); gap:0.8rem;">
-    <article style="border:1px solid #dbe1e8; border-radius:0.65rem; padding:0.8rem;">
-      <p style="margin:0; color:#475569;">Categories</p>
-      <p style="margin:0.4rem 0 0; font-size:1.3rem; font-weight:700;"><?= (int)$stats['categories'] ?></p>
-    </article>
-    <article style="border:1px solid #dbe1e8; border-radius:0.65rem; padding:0.8rem;">
-      <p style="margin:0; color:#475569;">Products</p>
-      <p style="margin:0.4rem 0 0; font-size:1.3rem; font-weight:700;"><?= (int)$stats['products'] ?></p>
-    </article>
-    <article style="border:1px solid #dbe1e8; border-radius:0.65rem; padding:0.8rem;">
-      <p style="margin:0; color:#475569;">Active products</p>
-      <p style="margin:0.4rem 0 0; font-size:1.3rem; font-weight:700;"><?= (int)$stats['active_products'] ?></p>
-    </article>
+<div class="stats-grid">
+  <article class="card stat-card">
+    <p>Categorías</p>
+    <strong><?= (int)$stats['categories'] ?></strong>
+  </article>
+  <article class="card stat-card">
+    <p>Productos</p>
+    <strong><?= (int)$stats['products'] ?></strong>
+  </article>
+  <article class="card stat-card">
+    <p>Productos activos</p>
+    <strong><?= (int)$stats['active_products'] ?></strong>
+  </article>
+</div>
+
+<section class="card catalog-entry">
+  <div>
+    <h2>Productos del catálogo</h2>
+    <p class="muted">Buscá, filtrá y ordená todos los productos desde un solo lugar.</p>
   </div>
-
-  <p style="margin:1rem 0 0; color:#64748b;">
-    Next step: implement product CRUD screens under this admin area.
-  </p>
+  <a class="button" href="<?= e(url('/admin/products')) ?>">Ver productos <span aria-hidden="true">→</span></a>
 </section>

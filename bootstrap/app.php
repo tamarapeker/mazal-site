@@ -2,6 +2,7 @@
 declare(strict_types=1);
 
 use App\Controllers\Admin\AuthController;
+use App\Controllers\Admin\ProductController;
 use App\Controllers\ContactController;
 use App\Controllers\PublicController;
 use App\Core\Router;
@@ -41,6 +42,7 @@ $router = new Router();
 $publicController = new PublicController();
 $contactController = new ContactController();
 $authController = new AuthController();
+$adminProductController = new ProductController();
 
 require base_path('routes/web.php');
 

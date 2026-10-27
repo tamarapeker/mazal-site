@@ -75,6 +75,14 @@ Then upload the generated file:
 
 - `public/assets/css/app.css`
 
+The backoffice also uses `public/assets/css/admin.css`, `public/assets/js/admin-product-form.js`
+and `public/assets/js/admin-product-list.js`.
+Upload these files with the rest of `assets/`. Product creation needs PHP Fileinfo and write permission
+for `public_html/assets/images/products/`. Include that directory's `.htaccess` when uploading hidden files.
+For images up to 5 MB, configure `upload_max_filesize=5M` or higher and `post_max_size=8M` or higher.
+Keep uploaded `UPLOAD_*` images when replacing static assets, and include them in backups;
+these runtime files are intentionally excluded from Git.
+
 ## Database
 
 1. In InfinityFree, create a MySQL database.

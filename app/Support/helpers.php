@@ -76,7 +76,7 @@ if (!function_exists('base_path')) {
 if (!function_exists('public_path')) {
     function public_path(string $path = ''): string
     {
-        $public = base_path('public');
+        $public = defined('PUBLIC_PATH') ? PUBLIC_PATH : base_path('public');
         if ($path === '') {
             return $public;
         }
@@ -316,7 +316,7 @@ if (!function_exists('require_admin_auth')) {
             return;
         }
 
-        flash('auth_error', 'Please sign in to continue.');
+        flash('auth_error', 'Iniciá sesión para continuar.');
         redirect('/admin/login');
     }
 }

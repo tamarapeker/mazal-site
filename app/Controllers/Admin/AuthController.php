@@ -16,7 +16,7 @@ final class AuthController
         }
 
         View::render('admin/login', [
-            'title' => 'Admin Login',
+            'title' => 'Iniciar sesión',
             'error' => pull_flash('auth_error'),
         ], 'admin');
     }
@@ -24,7 +24,7 @@ final class AuthController
     public function login(): void
     {
         if (!verify_csrf($_POST['_token'] ?? null)) {
-            flash('auth_error', 'Invalid form token. Please try again.');
+            flash('auth_error', 'El formulario venció. Volvé a intentarlo.');
             redirect('/admin/login');
         }
 
@@ -32,7 +32,7 @@ final class AuthController
         $password = (string)($_POST['password'] ?? '');
 
         if ($email === '' || $password === '') {
-            flash('auth_error', 'Email and password are required.');
+            flash('auth_error', 'Ingresá tu email y contraseña.');
             redirect('/admin/login');
         }
 
@@ -46,7 +46,7 @@ final class AuthController
         $admin = $stmt->fetch(PDO::FETCH_ASSOC);
 
         if (!$admin || (int)$admin['is_active'] !== 1 || !password_verify($password, (string)$admin['password_hash'])) {
-            flash('auth_error', 'Invalid credentials.');
+            flash('auth_error', 'El email o la contraseña son incorrectos.');
             redirect('/admin/login');
         }
 
@@ -80,7 +80,7 @@ final class AuthController
         $stats['active_products'] = (int)$pdo->query('SELECT COUNT(*) FROM products WHERE is_active = 1')->fetchColumn();
 
         View::render('admin/dashboard', [
-            'title' => 'Admin Dashboard',
+            'title' => 'Resumen del catálogo',
             'admin' => admin_user(),
             'stats' => $stats,
         ], 'admin');
@@ -89,7 +89,7 @@ final class AuthController
     public function logout(): void
     {
         if (!verify_csrf($_POST['_token'] ?? null)) {
-            flash('auth_error', 'Invalid logout request.');
+            flash('auth_error', 'No pudimos cerrar la sesión. Volvé a intentarlo.');
             redirect('/admin/login');
         }
 

@@ -1,6 +1,8 @@
 <?php
 declare(strict_types=1);
 
+define('PUBLIC_PATH', __DIR__);
+
 $projectRoot = resolveProjectRoot();
 
 if (PHP_SAPI === 'cli-server') {

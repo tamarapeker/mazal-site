@@ -795,6 +795,10 @@ h1, h2, h3 {
   visibility: hidden;
 }
 
+.static {
+  position: static;
+}
+
 .absolute {
   position: absolute;
 }
@@ -910,6 +914,10 @@ h1, h2, h3 {
 
 .inline-flex {
   display: inline-flex;
+}
+
+.table {
+  display: table;
 }
 
 .grid {

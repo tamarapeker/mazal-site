@@ -102,12 +102,91 @@ Routes available now:
 - `/contact`
 - `/admin/login`
 - `/admin`
+- `/admin/products`
+- `/admin/products/create`
+- `/admin/products/{id}/edit`
 
-## 4. Next Step
+## 4. Backoffice product list
 
-Implement product CRUD in admin:
+Sign in at `/admin/login`, then choose **Productos** or open `/admin/products`.
+The list reads the existing MySQL catalog, including inactive products and categories, with:
 
-- List products
-- Create product
-- Edit product
-- Soft delete / activate
+- Search by product code or name.
+- Category and product status filters, which can be combined with search.
+- Ascending/descending sorting by code, name or category by clicking the column headers.
+- Server-side pagination of 25 products, preserving the selected filters and sort order.
+- Existing image thumbnails, minimum sale (stored in `unit`), quantity per bulk, status and a public detail link for published products.
+- **Editar** and a status action on each row: **Desactivar** for active products, **Activar** for inactive ones.
+
+Filters use GET parameters, so the current selection can be bookmarked. Sorting and applying filters start
+at page one; pagination keeps the selection. No database migration is needed for this screen.
+Admin styles live in `public/assets/css/admin.css` and do not require a Tailwind rebuild.
+
+Run `C:/xampp/php/php.exe tests/admin-products.php` (or `php tests/admin-products.php`) to verify the listing.
+The test requires the configured MySQL connection and creates connection-local temporary tables;
+the real catalog is not modified.
+
+### Create a product
+
+Choose **Nuevo producto** above the table, or open `/admin/products/create`.
+Code, name, category and status are required. Codes are normalized to uppercase and must be unique
+(up to 40 letters, numbers, hyphens or underscores). Description, minimum sale, quantity per bulk,
+measures and image are optional. The slug is generated automatically.
+
+Measures use one input per value, with **Agregar medida** and **Quitar** controls (up to 50 values of
+80 characters). Blank values are ignored and exact duplicates are removed; the list is stored in the
+existing `sizes` JSON column. Minimum sale remains stored in `unit` and is only shown in the backoffice.
+An active product is public when its category is also active; an inactive product is kept in the backoffice.
+The initial status is chosen when creating the product. Subsequent status changes happen from the table.
+
+The form preserves entered text and measures after validation errors. Browsers require the image to be
+selected again after a server error. Successful saves redirect to the table with a confirmation and a
+search for the new code. Both creation routes require an admin session; POST also verifies CSRF.
+
+### Edit and deactivate products
+
+**Editar** opens `/admin/products/{id}/edit` with the existing database values, measures, status and
+image loaded into the same form used for creation. The code is read-only and the server always keeps
+the stored code, even if a modified request submits another value. The slug also stays unchanged.
+The status select displays the current state and is disabled in Editar, with a hint to use the table's
+status action. Editing ignores any submitted `is_active` value and never updates that column.
+Saving posts to `/admin/products/{id}/update` and returns to the list with a confirmation.
+
+Leaving the image field empty keeps the current image. Selecting a new image replaces it;
+**Quitar la imagen actual al guardar** removes the image association. Changes are saved in a database
+transaction. A failed save preserves the old image and removes any newly uploaded file. After a successful
+replacement/removal, unreferenced `UPLOAD_*` files are cleaned up; imported static assets and images
+still referenced by other products are preserved.
+
+The table's status button asks for confirmation inside the page, showing the product code and name.
+**Desactivar** posts to `/admin/products/{id}/deactivate`; **Activar** posts to `/admin/products/{id}/activate`.
+This is a soft delete: only `is_active` changes to `0`; the record, code, fields and image are retained.
+The product stops appearing in the public catalog. The list preserves its filters, sorting and page,
+and replaces the action with **Activar** for inactive products. Activation sets `is_active` to `1`;
+the product becomes public when its category is active. Each action requests a specific state,
+so repeated submissions cannot accidentally toggle it back. All mutation routes require an admin session and a valid CSRF token; GET
+requests never update or deactivate products.
+
+### Uploaded product images
+
+The form supports an optional JPG, PNG or WebP image, with a preview and a remove button before saving.
+PHP checks the actual MIME type, image header/dimensions and size (up to 5 MiB and 40 megapixels).
+SVG and other file types are rejected. The browser-supplied filename is never used as the stored filename.
+`move_uploaded_file()` saves the image as `UPLOAD_<random uppercase hex>.jpg|png|webp` in
+`public/assets/images/products/`; only that filename is stored in `products.image_filename`.
+On split hosting layouts, `public/index.php` defines the actual served public directory so the image
+is written under the deployed `public_html/assets/images/products/` directory.
+If database insertion fails after moving the image, the new file is removed.
+
+The host needs PHP Fileinfo and write permission for the product image directory. Set
+`upload_max_filesize` to at least `5M` and `post_max_size` to a larger value, such as `8M`, to allow
+multipart overhead. Upload the image directory's `.htaccess` on Apache; it denies script execution requests.
+Uploaded `UPLOAD_*` files are ignored by Git. Include them in backups and preserve them when deploying
+static assets. See the [PHP upload documentation](https://www.php.net/manual/en/features.file-upload.post-method.php).
+
+Run `node tests/create-product.mjs` for HTTP integration checks covering creation, preloaded editing,
+immutable codes/slugs and edit status, table-only activation/deactivation, validation, session/CSRF, multipart uploads,
+JSON measures, size/type rejection, image lifecycle and rollback after storage/database errors.
+Like the listing test, this uses connection-local temporary MySQL tables; uploaded test files and
+fixture state live in an isolated OS temporary directory. No real catalog records are changed.
+`node tests/create-product.mjs --preview` keeps the isolated test server running for browser QA.
