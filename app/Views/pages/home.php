@@ -36,10 +36,8 @@
     <div class="mt-6 grid gap-4 px-3 sm:grid-cols-2 sm:px-0 lg:grid-cols-4">
       <?php foreach ($featuredProducts as $product): ?>
         <?php $featuredImage = product_image_by_filename((string)($product['image_filename'] ?? '')); ?>
-        <?php $unitValue = trim((string)($product['unit'] ?? '')); ?>
-        <?php $unitDisplay = ($unitValue !== '' && strtolower($unitValue) !== 'unit') ? $unitValue : '-'; ?>
         <?php $bulkValue = trim((string)($product['quantity_per_bulk'] ?? '')); ?>
-        <article class="catalog-card mx-auto w-full max-w-sm overflow-hidden sm:max-w-none">
+        <article class="catalog-card mx-auto flex w-full max-w-sm flex-col overflow-hidden sm:max-w-none">
           <?php if ($featuredImage !== null): ?>
             <img
               src="<?= e($featuredImage) ?>"
@@ -48,11 +46,12 @@
           <?php else: ?>
             <div class="aspect-[4/3] bg-gradient-to-br from-mazal-lime/25 to-mazal-green/30"></div>
           <?php endif; ?>
-          <div class="p-4">
-            <h3 class="text-lg font-bold text-mazal-forest"><?= e((string)$product['name']) ?></h3>
-            <p class="mt-2 text-sm text-zinc-700">Venta minima: <?= e($unitDisplay) ?></p>
-            <p class="text-sm text-zinc-600">Bulto por <?= e($bulkValue !== '' ? $bulkValue : '-') ?></p>
-            <a href="<?= e(url('/product/' . strtolower((string)$product['product_code']))) ?>" class="pill-button-orange mt-4">Ver detalles</a>
+          <div class="flex flex-1 flex-col p-4">
+            <h3 translate="no" class="text-lg font-bold text-mazal-forest"><?= e((string)$product['name']) ?></h3>
+            <p class="mt-2 text-sm text-zinc-600">Bulto por <?= e($bulkValue !== '' ? $bulkValue : '-') ?></p>
+            <div class="mt-auto pt-4">
+              <a href="<?= e(url('/product/' . strtolower((string)$product['product_code']))) ?>" class="pill-button-orange">Ver detalles</a>
+            </div>
           </div>
         </article>
       <?php endforeach; ?>

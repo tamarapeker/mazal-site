@@ -1,7 +1,5 @@
 <?php
 $productImage = product_image_by_filename((string)($product['image_filename'] ?? ''));
-$unitValue = trim((string)($product['unit'] ?? ''));
-$unitDisplay = ($unitValue !== '' && strtolower($unitValue) !== 'unit') ? $unitValue : '-';
 $bulkValue = trim((string)($product['quantity_per_bulk'] ?? ''));
 $descriptionValue = trim((string)($product['description'] ?? ''));
 $sizesList = [];
@@ -20,7 +18,7 @@ if (is_array($sizes)) {
   <div class="site-shell flex h-full items-center">
     <div>
       <p class="text-xs font-extrabold uppercase tracking-[0.2em] text-emerald-100">Detalle de producto</p>
-      <h1 class="mt-2 max-w-4xl font-display text-4xl font-extrabold uppercase tracking-widest text-white sm:text-5xl"><?= e((string)$product['name']) ?></h1>
+      <h1 translate="no" class="mt-2 max-w-4xl font-display text-4xl font-extrabold uppercase tracking-widest text-white sm:text-5xl"><?= e((string)$product['name']) ?></h1>
     </div>
   </div>
 </section>
@@ -46,15 +44,9 @@ if (is_array($sizes)) {
     </article>
 
     <article class="catalog-card p-6">
-      <div class="grid gap-4 sm:grid-cols-2">
-        <div>
-          <p class="text-xs font-extrabold uppercase tracking-widest text-zinc-400">Codigo</p>
-          <p class="mt-1 text-lg font-bold text-zinc-800"><?= e((string)$product['product_code']) ?></p>
-        </div>
-        <div>
-          <p class="text-xs font-extrabold uppercase tracking-widest text-zinc-400">Venta minima</p>
-          <p class="mt-1 text-lg font-bold text-zinc-800"><?= e($unitDisplay) ?></p>
-        </div>
+      <div>
+        <p class="text-xs font-extrabold uppercase tracking-widest text-zinc-400">Codigo</p>
+        <p class="mt-1 text-lg font-bold text-zinc-800"><?= e((string)$product['product_code']) ?></p>
       </div>
 
       <div class="mt-5 rounded-lg border border-emerald-950/15 bg-mazal-gray p-4">
