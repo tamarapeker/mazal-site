@@ -80,8 +80,10 @@ and `public/assets/js/admin-product-list.js`.
 Upload these files with the rest of `assets/`. Product creation needs PHP Fileinfo and write permission
 for `public_html/assets/images/products/`. Include that directory's `.htaccess` when uploading hidden files.
 For images up to 5 MB, configure `upload_max_filesize=5M` or higher and `post_max_size=8M` or higher.
-Keep uploaded `UPLOAD_*` images when replacing static assets, and include them in backups;
-these runtime files are intentionally excluded from Git.
+Keep all existing product images when replacing static assets, and include them in backups.
+Original catalog photos and uploaded `UPLOAD_*` images are intentionally excluded from Git;
+only the product directory's `.htaccess` is versioned. A fresh checkout needs the image files copied
+from hosting or a backup. This Git-only removal does not require deleting any images through FTP.
 
 ## Database
 

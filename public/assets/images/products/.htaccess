@@ -1,0 +1,4 @@
+# Product images are static files; never execute scripts in this directory.
+<FilesMatch "(?i)\.(php[0-9]?|phtml|pht|phar|cgi|pl|py|sh|shtml)(\.|$)">
+  Require all denied
+</FilesMatch>

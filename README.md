@@ -181,8 +181,12 @@ If database insertion fails after moving the image, the new file is removed.
 The host needs PHP Fileinfo and write permission for the product image directory. Set
 `upload_max_filesize` to at least `5M` and `post_max_size` to a larger value, such as `8M`, to allow
 multipart overhead. Upload the image directory's `.htaccess` on Apache; it denies script execution requests.
-Uploaded `UPLOAD_*` files are ignored by Git. Include them in backups and preserve them when deploying
-static assets. See the [PHP upload documentation](https://www.php.net/manual/en/features.file-upload.post-method.php).
+Product images, including the original catalog photos and uploaded `UPLOAD_*` files, are excluded
+from Git. The product directory's `.htaccess` remains versioned. When setting up a fresh checkout,
+copy the catalog images from the hosting or a backup into `public/assets/images/products/`.
+Include these images in backups and preserve them when deploying static assets. Removing them from
+the current Git tree does not remove copies in earlier commits or make the public website's images private.
+See the [PHP upload documentation](https://www.php.net/manual/en/features.file-upload.post-method.php).
 
 Run `node tests/create-product.mjs` for HTTP integration checks covering creation, preloaded editing,
 immutable codes/slugs and edit status, table-only activation/deactivation, validation, session/CSRF, multipart uploads,
